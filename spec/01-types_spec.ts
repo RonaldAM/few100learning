@@ -51,4 +51,16 @@ describe('variables and constants and stuff', () => {
         });
 
     });
+
+    describe('various literals', () => {
+        it('examples', () => {
+            let n1 = 12;
+            let n2 = 1.3
+            let n3 = 0xff;   // still a number
+            let n4 = 0b00101; // still a number
+            let n5 = 0o744;
+            // typescript thing
+            const salart = 1_000_000;
+        });
+    });
 });
