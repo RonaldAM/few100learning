@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { formatName } from "./utils";
 describe('functions', () => {
     describe('syntax for creating them', () => {
@@ -85,6 +86,35 @@ describe('functions', () => {
 
             expect(h1Maker('Big!')).toBe('<h1>Big!</h1>');
             expect(pMaker('small')).toBe('<p>small</p>');
+        });
+    });
+
+    describe('some lodash goodness', () => {
+        it('supports memoization', () => {
+            function doSomeHardWork() {
+                console.log('doing the hard work here');
+                return 'work is done!';
+            }
+            const memo = _.memoize(doSomeHardWork);
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+            expect(memo()).toBe('work is done!');
+        });
+
+        it('currying', () => {
+            function makeElement(tag: string, content: string) {
+                return `<${tag}>${content}</${tag}>`;
+            }
+            const curriedTagMaker = _.curry(makeElement);
+
+            const h1Maker = curriedTagMaker('h1');
+            const pMaker = curriedTagMaker('p');
+
+            expect(h1Maker('Hello')).toBe('<h1>Hello</h1>');
         });
     });
 });
