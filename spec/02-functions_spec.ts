@@ -16,6 +16,20 @@ describe('functions', () => {
 
             const divide = (a: number, b: number) => a / b;
             expect(divide(10, 2)).toBe(5);
+
+            const logIt = (msg: string) => {
+                msg = msg.toUpperCase();
+                console.log(msg);
+                return true;
+            }
+            logIt('fun');
+        });
+    });
+
+    describe('higher order functions', () => {
+        // a function that takes as an argument one or more functions and returns a function
+        it('first example', () => {
+
         });
     });
 });
