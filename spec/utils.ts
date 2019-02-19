@@ -1,3 +1,3 @@
-function formatName(first: string, last: string) {
-    return `${last}, ${first}`;
+export function formatName(first: string, last: string, fn: any) {
+    return fn(`${last}, ${first}`);
 }
