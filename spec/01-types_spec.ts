@@ -73,6 +73,32 @@ describe('variables and constants and stuff', () => {
 
             let food = stuff[2];
         });
+
+        describe('tuples', () => {
+            it('a brief introduction TS', () => {
+                let warren: [string, string, number, string];
+                warren = ['Warren', 'Ellis', 55, 'musician'];
+
+                let occupation = warren[3];
+                let age = warren[2];
+            });
+            it('an example', () => {
+
+                function formatName(first: string, last: string): [string, number] {
+                    const fullName = `${last}, ${first}`;
+                    return [fullName, fullName.length];
+                }
+                const [fullName, len] = formatName('Han', 'Solo'); // destructuring
+                expect(fullName).toBe('Solo, Han');
+                expect(len).toBe(9);
+
+
+                const stuff = ['Jeff', 'Gonzalez', 49];
+                const [firstName, , age] = stuff;
+                expect(firstName).toBe('Jeff');
+                expect(age).toBe(49);
+            });
+        });
     });
 });
 
