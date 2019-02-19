@@ -63,4 +63,16 @@ describe('variables and constants and stuff', () => {
             const salart = 1_000_000;
         });
     });
+
+    describe('arrays and array literals', () => {
+        it('has them', () => {
+            const stuff: Array<number | string> = [12, 14];
+            stuff[2] = 'tacos';
+
+            expect(stuff[2]).toBe('tacos');
+
+            let food = stuff[2];
+        });
+    });
 });
+
