@@ -22,7 +22,7 @@ module.exports = (config) => {
 
         reporters: ['progress', 'karma-typescript'],
 
-        browsers: ['ChromeHeadless'], // or just 'Chrome', 'Edge', 'firefox', etc.  npm i karma-edge-launcher
+        browsers: ['ChromeHeadless'], // or just 'ChromeHeadless', 'Edge', 'firefox', etc.  npm i karma-edge-launcher
 
     });
 };

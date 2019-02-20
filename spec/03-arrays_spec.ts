@@ -1,3 +1,5 @@
+import { roundToTwoPlaces } from "./utils";
+
 describe('destructuring', () => {
     it('destructuring arrays', () => {
         const friends = ['sean', 'billy', 'david', 'sarah', 'mo'];
@@ -45,8 +47,179 @@ describe('destructuring', () => {
 
 
     });
+})
+describe('array methods', () => {
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    it('forEach allows you to look at each member', () => {
+        numbers.forEach((n) => console.log(n));
+    });
+    describe('methods that produce a new array', () => {
+        it('selecting specific stuff from an array', () => {
+            const evens = numbers.filter(n => n % 2 === 0);
+            expect(evens).toEqual([2, 4, 6, 8]);
+            expect(numbers).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        });
 
-    describe('array methods', () => {
+        it('map lets you transform each element of the source array', () => {
+
+            const dubs = numbers.map(n => n * 2);
+            expect(dubs).toEqual([2, 4, 6, 8, 10, 12, 14, 16, 18]);
+        });
+        it('a quick practice', () => {
+            interface Vehicle {
+                vin: string;
+                makeAndModel: string;
+                mileage: number;
+            }
+            const vehicles: Vehicle[] = [
+                { vin: '9999', makeAndModel: 'Chevy Tahoe', mileage: 182000 },
+                { vin: 'aka92', makeAndModel: 'Toyota Prius', mileage: 89999 },
+                { vin: 'kduwi', makeAndModel: 'Ford Explorer', mileage: 99998 }
+            ];
+
+
+            const answer = ['Toyota Prius', 'Ford Explorer'];
+
+            // find all the vehicles with < 100_000, but just give me the make and model.
+
+            const result = vehicles                 // all of the vehicles
+                .filter(vv => vv.mileage < 100000)  // vehicles with less than 100000
+                .map(v => v.makeAndModel)           // an new array of strings
+            expect(result).toEqual(answer);
+        });
+        it('another example', () => {
+            interface Product {
+                id: number;
+                description: string;
+                cost: number;
+            }
+
+            const products: Product[] = [
+                { id: 1, description: 'Eggs', cost: 1.99 },
+                { id: 2, description: 'Beer', cost: 7.99 },
+                { id: 3, description: 'Chips', cost: 2.99 },
+            ];
+
+            // our price markup is 30%.
+            // for each product create an array of objects that look like this:
+            interface SaleItem {
+                id: number;
+                description: string;
+                price: number;
+            }
+            const answer: SaleItem[] = products
+                .map(p => {
+                    const result: SaleItem = {
+                        id: p.id,
+                        description: p.description,
+                        price: roundToTwoPlaces(p.cost)
+                    };
+                    return result;
+                })
+                .filter(si => si.price > 5.00);
+
+            expect(answer).toEqual([{ id: 2, description: 'Beer', price: 10.39 }]);
+            // but only if the price is > $5.00 
+        });
+    });
+
+    describe('methods that produce a single value(scalar)', () => {
+        it('has methods to check the membership of an array', () => {
+            expect(numbers.some(n => n > 8)).toBe(true);
+            expect(numbers.every(n => n < 10)).toBe(true);
+        });
+        it('has reduce', () => {
+            expect(numbers.reduce((prev, cur) => prev + cur)).toBe(45); // function is called 9 times
+            expect(numbers.reduce((p, c) => { console.log({ p, c }); return p + c; }, 100));
+        });
+        it('early morning contemplations', () => {
+            interface Vehicle {
+                vin: string;
+                makeAndModel: string;
+                mileage: number;
+            }
+            const vehicles: Vehicle[] = [
+                { vin: '9999', makeAndModel: 'Chevy Tahoe', mileage: 182000 },
+                { vin: 'aka92', makeAndModel: 'Toyota Prius', mileage: 89999 },
+                { vin: 'kduwi', makeAndModel: 'Ford Explorer', mileage: 99998 }
+            ];
+            // I want the make and model of the car with the highest mileage (don't worry about ties. that can be homework)
+            interface TempResult {
+                makeAndModel: string;
+                mileage: number;
+            }
+            const initialState: TempResult = {
+                makeAndModel: null,
+                mileage: -1
+            };
+            const answer = vehicles
+                .reduce((state, next) => {
+                    if (next.mileage > state.mileage) {
+                        return {
+                            makeAndModel: next.makeAndModel,
+                            mileage: next.mileage
+                        }
+                    } else {
+                        return state;
+                    }
+
+                }, initialState).makeAndModel;
+
+            expect(answer).toBe('Chevy Tahoe');
+        });
+
+        it('ok one more example', () => {
+
+            const friends = ['sean', 'billy', 'stacey', 'david'];
+
+            interface Answer {
+                list: string;
+                numberOfFriends: number;
+            }
+            const initialState: Answer = {
+                list: '',
+                numberOfFriends: 0
+            }
+            const answer = friends
+                .map(f => f.toUpperCase())
+                .reduce((state, next) => {
+                    return {
+                        list: state.list ? state.list + ' ' + next : next,
+                        numberOfFriends: state.numberOfFriends + 1
+                    }
+                }, initialState)
+
+            expect(answer.list).toBe('SEAN BILLY STACEY DAVID');
+            expect(answer.numberOfFriends).toBe(4);
+        });
+        it('final example and I mean it', () => {
+
+            interface Action {
+                type: string;
+            }
+
+            const stuffThatHappened: Action[] = [
+                { type: 'ADDED' },
+                { type: 'ADDED' },
+                { type: 'SUBTRACTED' },
+                { type: 'ADDED' },
+            ];
+
+            const initialState = 0;
+
+            const answer = stuffThatHappened.reduce((state, next) => {
+                switch (next.type) {
+                    case 'ADDED': {
+                        return state + 1;
+                    }
+                    case 'SUBTRACTED': {
+                        return state - 1;
+                    }
+                }
+            }, initialState)
+
+            expect(answer).toBe(2);
+        });
 
     });
-});
+})
